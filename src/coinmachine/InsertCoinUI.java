@@ -8,9 +8,10 @@ import java.util.Observer;
 import javax.swing.*;
 
 /**
- * The observer class for update status and balance of the coin machine
- * @author Budnampetch Onmee
+ * The observer class for update status and 
+ * balance of the coin machine.
  * 
+ * @author Budnampetch Onmee
  */
 public class InsertCoinUI extends JFrame implements Observer {
 	private CoinMachine coin;
@@ -20,14 +21,20 @@ public class InsertCoinUI extends JFrame implements Observer {
 	private JTextField balance;
 	private JButton oneButton, fiveButton, tenButton;
 	private JProgressBar currStatus;
-	
+	/**
+	 * Constructor of InsertCoinUI class
+	 * @param coin recieve form coin machine class
+	 */
 	public InsertCoinUI(CoinMachine coin){
 		this.coin = coin;
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		initComponents();
 	}
-
+	/**
+	 * Create initial component and add to display
+	 */
 	public void initComponents() {
+		//create layout of display
 		contents = new JPanel();
 		contents.setLayout(new GridLayout(2,1));
 		
@@ -43,6 +50,7 @@ public class InsertCoinUI extends JFrame implements Observer {
 		textStatus = new JLabel("     Status: ");
 		currStatus = new JProgressBar(0,10);
 		
+		//add button and insert coin when user click
 		oneButton = new JButton();
 		oneButton.setIcon(new ImageIcon(InsertCoinUI.class.getResource("/images/1baht.png")));
 		oneButton.addActionListener(new ActionListener(){
@@ -67,6 +75,7 @@ public class InsertCoinUI extends JFrame implements Observer {
 			}
 		});
 		
+		//add component to JFrame
 		this.add(contents);
 		contents.add(panelA);
 		contents.add(panelB);
@@ -89,5 +98,13 @@ public class InsertCoinUI extends JFrame implements Observer {
 	public void update(Observable o, Object arg) {
 		currStatus.setValue(((CoinMachine)o).getCount());
 		balance.setText("" + ((CoinMachine)o).getBalance());
+		
+		if (((CoinMachine)o).getCount() == 1)
+			System.out.println(((CoinMachine)o).getBalance());
+		else if (((CoinMachine)o).getCount() <= 10){
+			System.out.println("Machine balance : " + ((CoinMachine)o).getBalance());
+			if (((CoinMachine)o).getCount() == 10)
+				System.out.println("Machine contains " + ((CoinMachine)o).getCount() + " coins and value " + ((CoinMachine)o).getBalance() + " Baht" + "\nMachine is FULL.");
+		}
 	}
 }

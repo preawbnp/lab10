@@ -1,4 +1,5 @@
 package coinmachine;
+import java.awt.EventQueue;
 import java.util.Scanner;
 
 /**
@@ -59,26 +60,23 @@ public class Demo {
 	public static void main(String[] args) {
 		final int capacity = 10;  // how many coins the machine can hold
 		CoinMachine machine = new CoinMachine( capacity );
-		UpdateCoin updateCoin = new UpdateCoin();
+//		UpdateCoin updateCoin = new UpdateCoin();
 
 		InsertCoinUI insertCoin = new InsertCoinUI(machine);
 		CoinUI coin = new CoinUI(machine);
 		insertCoin.setBounds(0,0,400,300);
 
 		Demo demo = new Demo();
-		
 
 		try {
 			machine.addObserver(insertCoin);
 			machine.addObserver(coin);
 			insertCoin.setVisible(true);
 			coin.setVisible(true);
-//			machine.addObserver(updateCoin);
-				demo.insertDialog(machine);
 
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-
+		demo.insertDialog(machine);
 	}
 }
