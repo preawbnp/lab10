@@ -9,8 +9,10 @@ import java.util.Scanner;
 public class Demo {
 	// create a java.util.Scanner object for use in all methods
 	private static Scanner console = new Scanner( System.in );
+	static CoinMachine coinMachine = new CoinMachine(10);
+//	private static boolean isFinish = false;
 	
-	
+
 	/** run the user interface */
 	public void insertDialog(CoinMachine machine) {
 		System.out.println("Coin Machine has a capacity of "+ machine.getCapacity());
@@ -28,51 +30,55 @@ public class Demo {
 				else {
 					Coin coin = new Coin(value);
 					if ( machine.insert( coin ) ) {
-						System.out.println(coin+" inserted");
+						System.out.println(coin + " inserted");
 					} else {
-						System.out.println("Insert "+coin+" FAILED.");
+						System.out.println("Insert " + coin + " FAILED.");
 					}
 				}
 			}
-			
-			
 		} while( ! machine.isFull() );
-		
 		displayMachineStatus(machine);
-		
 	}
-	
+
 	/** Show the number of coins and their total value. */
-	private void displayMachineStatus(CoinMachine machine) {
+	private static void displayMachineStatus(CoinMachine machine) {
 		// CLUDGE: how to get the currency?  Look at the first coin in machine.
 		String currency = "";
-		if (machine.getCount() > 0) currency = machine.getCoins().get(0).getCurrency();
-//		System.out.printf("Machine contains %d coins and value %d %s\n",
-//				machine.getCount(), machine.getBalance(), currency);	
-		if (machine.isFull()) System.out.println("Machine is FULL.");
+		if (machine.getCount() > 0) 
+			currency = machine.getCoins().get(0).getCurrency();
+		System.out.printf("Machine contains %d coins and value %d %s\n",
+				machine.getCount(), machine.getBalance(), currency);
+		if (machine.isFull()) System.out.println("Machine is FULL.\n");
+		
 	}
-	
+
 	/**
 	 * Run a console demo.
 	 * @param args not used
 	 */
 	public static void main(String[] args) {
 		final int capacity = 10;  // how many coins the machine can hold
-		
 		CoinMachine machine = new CoinMachine( capacity );
+		UpdateCoin updateCoin = new UpdateCoin();
+
+		InsertCoinUI insertCoin = new InsertCoinUI(machine);
+		CoinUI coin = new CoinUI(machine);
+		insertCoin.setBounds(0,0,400,300);
+
 		Demo demo = new Demo();
-		//TODO add observers
-		demo.insertDialog(machine);
+		
+
+		try {
+			machine.addObserver(insertCoin);
+			machine.addObserver(coin);
+			insertCoin.setVisible(true);
+			coin.setVisible(true);
+//			machine.addObserver(updateCoin);
+				demo.insertDialog(machine);
+
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
